@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+
+{% block bigtitre %}
+      <h1 class="header center  orange-text text-darken-3">Edition de {{car.model}}</h1>
+{% endblock %}
+
+{% block livres %}
+    {% include 'home/form.html.twig' %}
+      <button class="btn waves-effect waves-light" type="submit" name="action">Modifier</button>
+{{ form_end(form) }}  
+{% endblock %}
+
+{% block button %}
+   <a href="{{ path('home') }}" class="btn-large waves-effect waves-light orange darken-3">RETOUR</a>
+{% endblock %}
+
+
+
+
+{% block javascript %}
+{{ parent() }}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+      $(document).ready(function(){
+            $('select').formSelect();
+            // $ du container est une convention js pour dire que ca contient un objet jquery
+            // $("#car_keywords") selectionne l'input
+            //Récupère prototype html cr&er par symfony
+            var $container = $("#car_keywords");
+
+            // trouve le nombre d'input
+            // Recupère le nombre d'input keyword
+            var index = $container.find(':input').length;
+
+            $container.find('label.required').remove;
+
+            // si 0 input keyword, on en ajoute 1
+            if (index == 0){
+                  addKeyword($container)
+            }
+            // fonction bouton pour ajouter un imoput keyword 
+            $('.addKeyword').click(function(e){
+                  e.preventDefault();
+                  addKeyword($container);
+            })
+
+            $('.delete-keyword').click(function(e){
+                  var path = $(this).attr('data-delete-path');
+                  var keywordId = $(this).attr('data-keyword-id');
+                  var $keywordArea = $(this).closest('.keywordArea');
+
+                  $keywordArea.remove();
+
+            });
+
+            // crée l'input keyword pour l'index courant et l'ajoute 
+            // dans la div id="var_keywords" ave la methode append
+            function addKeyword($container){
+                  var template = $container.attr('data-prototype')
+                  // on remplace par l'index courant
+                  .replace(/__name__label__/g, 'Mot clé n°' + (index + 1))
+                  .replace(/__name/g, index)
+                  ;
+                  var $prototype = $(template);
+                  
+                  deleteButton($prototype);
+
+
+                  $container.append($prototype);
+
+                  index ++;
+            }
+
+            function deleteButton($prototype) {
+            var $deleteLink = $('<a href="#" class="btn waves-effect waves-light red">Annuler</a>');
+
+            $prototype.append($deleteLink);
+
+            $deleteLink.click(function(e) {
+                  $prototype.remove();
+
+                  e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                  return false;
+                  });
+            }
+
+            $('.delete-image').click(function(e){
+                  $('.responsive-img').remove();
+            })
+      });
+  </script>
+     
+ {% endblock %}

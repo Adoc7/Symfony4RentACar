@@ -1,0 +1,44 @@
+{% extends'base.html.twig' %}
+
+{% block bigtitre %}
+      <h1 class="header center  orange-text text-darken-3">Rent a car</h1>
+      <div class="row center">
+           <h5 class="header col s12 light">Location de Véhicule</h5>
+          <h2><i class="header center orange-text text-darken-3 material-icons">directions_car</i></h2>
+
+     </div>
+{% endblock %}
+
+ {% block livres %}
+
+   <ul>
+   <h1>Voitures disponibles</h1>
+   
+   
+      {% for car in cars %}
+           <li>
+           <h4><a href="{{ path('show', {id:car.id}) }}">{{car.model}}</a></h4>
+           
+
+           {% if is_granted('EDIT', car) %}
+          <span class="left-align">
+          <a href="{{ path("edit", {id : car.id}) }}" class="blue lighten-1 waves-effect waves-light btn"><i class="material-icons left">create</i>Editer</a>
+          </span>
+          {% endif %}
+          
+          {% if is_granted('DELETE', car) %}
+          <span class="left-align">
+          <a href="{{ path("delete", {id : car.id}) }}" class="red lighten-1 waves-effect waves-light btn"><i class="material-icons left">delete</i>Supprimer</a>
+          </span>
+          {% endif %}
+          </li>
+
+                  
+
+
+
+      {% endfor %}
+      </ul>
+ {% endblock %}
+
+   
